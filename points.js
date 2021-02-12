@@ -2,18 +2,18 @@ const fs = require('fs');
 
 const filename = 'points.json'
 
-var getPoints = function() {
+let getPoints = function() {
     return JSON.parse(fs.readFileSync(filename))
 }
 
-var setPoints = function(points) {
+let setPoints = function(points) {
     fs.writeFileSync(filename, JSON.stringify(points));
 }
 
-var addNewUsers = function(userIDs) {
-    var points = getPoints()
+let addNewUsers = function(userIDs) {
+    let points = getPoints()
     userIDs.forEach(userID => {
-        var userFound = false;
+        let userFound = false;
         points.people.forEach(person => {
             if (userID.toString() === person.username) {
                 userFound = true;
@@ -33,15 +33,15 @@ var addNewUsers = function(userIDs) {
     })
 }
 
-var getUser = function(userID) {
+let getUser = function(userID) {
     const points = getPoints();
     console.log(userID.toString())
     return points.people.find(person => person.username === userID.toString())
 }
 
-var getTop = function(n) {
+let getTop = function(n) {
     const points = getPoints();
-    var sortedPeople = points.people.sort((a, b) => {
+    let sortedPeople = points.people.sort((a, b) => {
         if (a.points > b.points) {
             return -1;
         } else if (a.points === b.points) {
@@ -53,8 +53,8 @@ var getTop = function(n) {
     return sortedPeople.splice(0, n);
 }
 
-var addPoints = function(userID, amount, win = null, gameWon = null, spent = false) {
-    var points = getPoints();
+let addPoints = function(userID, amount, win = null, gameWon = null, spent = false) {
+    let points = getPoints();
     const userIndex = points.people.findIndex(person => person.username === userID.toString())
     points.people[userIndex].points = points.people[userIndex].points + amount;
     if (win === true) {
@@ -74,7 +74,7 @@ var addPoints = function(userID, amount, win = null, gameWon = null, spent = fal
     
 }
 
-var getPersonCount = function() {
+let getPersonCount = function() {
     const points = getPoints();
     return points.people.length;
 }

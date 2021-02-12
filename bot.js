@@ -10,9 +10,6 @@ const client = new Discord.Client();
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
 
-    // tha boys 683922646022225934
-    // dev 279394634667655178
-
     commands = [
         {
             data: {
@@ -120,12 +117,27 @@ client.on('ready', () => {
         
     ]
 
+    /*
     commands.forEach(command => {
         // Send to dev server
         client.api.applications(process.env.DISCORD_ID).guilds('279394634667655178').commands.post(command);
         // Send to global
         client.api.applications(process.env.DISCORD_ID).commands.post(command)
-    })    
+    })
+    */
+    
+    let givePoints = setInterval(() => {
+        client.users.cache.array().forEach(user => {
+            client.guilds.cache.array().forEach(guild => {
+                const member = guild.member(user);
+                if (member) {
+                    if (member.voice.channel) {
+                        points.addPoints(user.id, 10);
+                    }
+                }
+            })
+        })
+    }, 600000)
 });
 
 client.on('message', message => {
@@ -136,7 +148,7 @@ client.on('message', message => {
                 filename = attachment.url.substr(attachment.url.lastIndexOf('/') + 1)
                 console.log(filename)
                 const files = fs.readdirSync('./audio/');
-                var fileExists = false;
+                let fileExists = false;
                 files.forEach(file => {
                     if (filename === file) {
                         fileExists = true;
@@ -164,11 +176,11 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
     console.log(`Command ID: ${interaction.data.id}`);
 
     // Collect guild, user, and member data
-    var guild = client.guilds.cache.get(interaction.guild_id);
+    let guild = client.guilds.cache.get(interaction.guild_id);
     if (guild === null) {
         guild = await client.guilds.fetch(interaction.guild_id);
     }
-    var user = client.users.cache.get(interaction.member.user.id);
+    let user = client.users.cache.get(interaction.member.user.id);
     if (client === null) {
         user = await client.users.fetch(interaction.member.user.id);
     }
@@ -203,7 +215,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                     // Check if file exists
                     const clipName = `${args[0].options[0].value}.mp3`
                     const files = fs.readdirSync('./audio/');
-                    var fileFound = false;
+                    let fileFound = false;
                     files.forEach(file => {
                         if (clipName === file) {
                             fileFound = true;
@@ -285,7 +297,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                         case "preset":
                             {
                                 const userData = points.getUser(interaction.member.user.id);
-                                var amount = args[0].options[0].options[0].value
+                                let amount = args[0].options[0].options[0].value
                                 
                                 switch (amount) {
                                     case "half":
@@ -334,7 +346,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                 break;
             case "top":
                 {
-                    var n = args[0].options[0].value;
+                    let n = args[0].options[0].value;
                     if (n >= Math.min(points.getPersonCount(), 11)) {
                         n = Math.min(points.getPersonCount(), 11)
                     }

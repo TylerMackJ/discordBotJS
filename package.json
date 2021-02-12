@@ -1,0 +1,19 @@
+{
+  "name": "auctioneer",
+  "version": "0.0.1",
+  "description": "A discord bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node --trace-warnings bot.js",
+    "run": "node bot.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/opus": "^0.4.0",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "ffmpeg-static": "^4.2.7",
+    "request": "^2.88.2"
+  }
+}

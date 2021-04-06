@@ -113,6 +113,12 @@ client.on('ready', () => {
                     }
                 ]
             }
+        },
+        {
+            data: {
+                name: "version",
+                description: "View version number",
+            }
         }
         
     ]
@@ -380,6 +386,13 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                 }
                 break;
         }
+    } else if (command === "version") {
+        client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+            type: 4,
+            data: {
+                content: `Version: ${require("./package").version}`
+            }
+        }});
     }
 
 

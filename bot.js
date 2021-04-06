@@ -29,7 +29,7 @@ client.on('ready', () => {
                             {
                                 name: "name",
                                 description: "The name of the clip to play",
-                                type: 3,
+                                type: 4,
                                 required: true
                             }
                         ]
@@ -68,7 +68,7 @@ client.on('ready', () => {
                                     {
                                         name: "choice",
                                         description: "The preset you would like to flip for",
-                                        type: 3,
+                                        type: 4,
                                         required: true,
                                         choices: [
                                             {
@@ -203,7 +203,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
 
                     // Send the string back to the channel
                     client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                        type: 3,
+                        type: 4,
                         data: {
                             content: res
                         }
@@ -223,7 +223,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                     })
                     if(!fileFound) {
                         client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                            type: 3,
+                            type: 4,
                             data: {
                                 content: `<@${interaction.member.user.id}>, ${args[0].options[0].value} is not a clip!`
                             }
@@ -232,13 +232,16 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                         // Check if user is in a voice channel
                         if (member.voice.channel === null) {
                             client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                                type: 3,
+                                type: 4,
                                 data: {
                                     content: `<@${interaction.member.user.id}>, join a voice channel!`
                                 }
                             }});
                         } else {
                             // Join voice channel and play clip
+                            client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+                                type: 1,
+                            }});
                             member.voice.channel.join().then(connection => {
                                 connection.play(`./audio/${clipName}`).on('finish', () => {
                                     connection.channel.leave();
@@ -260,21 +263,21 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                                 const amount = args[0].options[0].options[0].value
                                 if (amount <= 0) {
                                     client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                                        type: 3,
+                                        type: 4,
                                         data: {
                                             content: `<@${interaction.member.user.id}> tried to type negative points lmao`
                                         }
                                     }});
                                 } else if (amount > userData.points) {
                                     client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                                        type: 3,
+                                        type: 4,
                                         data: {
                                             content: `<@${interaction.member.user.id}> tried to type more points than they have`
                                         }
                                     }});
                                 } else {
                                     client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                                        type: 3,
+                                        type: 4,
                                         data: {
                                             content: `Flipping ${amount} for <@${interaction.member.user.id}>...`
                                         }
@@ -308,7 +311,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                                         break;
                                 }
                                 client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                                    type: 3,
+                                    type: 4,
                                     data: {
                                         content: `Flipping ${amount} for <@${interaction.member.user.id}>...`
                                     }
@@ -337,7 +340,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                 {
                     const userData = points.getUser(interaction.member.user.id);
                     client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                        type: 3,
+                        type: 4,
                         data: {
                             content: `<@${interaction.member.user.id}> has ${userData.points.toString()}\nStats:\n\tSpent: ${userData.spent.toString()}\n\tWon ${userData.win.toString()}\n\tLost: ${userData.loss.toString()}\n\tW/L: ${(Math.round((userData.gamesWon / userData.gamesLost) * 100) / 10).toString()}`
                         }
@@ -352,7 +355,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                     }
                     if (n <= 0) {
                         client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                            type: 3,
+                            type: 4,
                             data: {
                                 content: `<@${interaction.member.user.id}>, ${n} is not valid...>`
                             }
@@ -364,7 +367,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                             res = `${res}${index.toString()})\t${player.points}\t<@${player.username}>\n`
                         })
                         client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                            type: 3,
+                            type: 4,
                             data: {
                                 content: res,
                                 allowed_mentions: []

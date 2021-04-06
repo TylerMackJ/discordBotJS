@@ -240,11 +240,14 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                         } else {
                             // Join voice channel and play clip
                             client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-                                type: 1,
+                                type: 5,
                             }});
                             member.voice.channel.join().then(connection => {
                                 connection.play(`./audio/${clipName}`).on('finish', () => {
                                     connection.channel.leave();
+                                    client.api.webhooks(client.user.id,interaction.token).post({data: {
+                                        content: `Played clip ${clipName}`
+                                    }});
                                 })
                             })
                         }
